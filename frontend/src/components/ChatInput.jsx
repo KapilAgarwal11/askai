@@ -58,7 +58,8 @@ export default function ChatInput({ onSend, disabled }) {
         const token = localStorage.getItem("ai-chat-token");
         const formData = new FormData();
         formData.append("file", attachedFile.file);
-        const res = await fetch("http://localhost:3001/api/chat/upload", {
+        const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001/api";
+        const res = await fetch(`${API_URL}/chat/upload`, {
           method: "POST",
           headers: token ? { Authorization: `Bearer ${token}` } : {},
           body: formData,
