@@ -1,28 +1,12 @@
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 
 async function sendOTPEmail(to, otp, purpose = "verification") {
   try {
-    // Create Gmail transporter with port 465 (SSL) for Render compatibility
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true, // true for 465 (SSL)
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-      tls: {
-        rejectUnauthorized: false
-      }
-    });
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
-    // Verify connection
-    await transporter.verify();
-    console.log("✅ SMTP connection verified");
-
-    const mailOptions = {
-      from: `"AskAI" <${process.env.EMAIL_USER}>`,
-      to: to,
+    const { data, error } = await resend.emails.send({
+      from: "AskAI <onboarding@resend.dev>", // Resend's test domain
+      to: [to],
       subject: `Your ${purpose} code — AskAI`,
       html: `
         <div style="font-family:sans-serif;max-width:400px;margin:0 auto;padding:32px;background:#111;color:#e8e8e8;border-radius:12px;">
@@ -38,11 +22,15 @@ async function sendOTPEmail(to, otp, purpose = "verification") {
           </p>
         </div>
       `,
-    };
+    });
 
-    const info = await transporter.sendMail(mailOptions);
-    console.log("✅ Email sent successfully:", info.messageId);
-    return info;
+    if (error) {
+      console.error("❌ Resend error:", error);
+      throw new Error(error.message);
+    }
+
+    console.log("✅ Email sent successfully via Resend:", data.id);
+    return data;
   } catch (error) {
     console.error("❌ Email sending failed:", error.message);
     throw new Error(`Failed to send email: ${error.message}`);
