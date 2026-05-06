@@ -14,6 +14,9 @@ const passwordRoutes = require("./routes/password");
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Trust proxy for Render/Vercel deployments
+app.set("trust proxy", 1);
+
 // MongoDB
 mongoose
   .connect(process.env.MONGO_URI)
