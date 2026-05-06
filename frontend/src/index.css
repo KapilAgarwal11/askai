@@ -1,0 +1,44 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #0d0d0d;
+  color: #e8e8e8;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Mobile: allow scroll */
+@media (max-width: 640px) {
+  body {
+    overflow: auto;
+    height: auto;
+    min-height: 100vh;
+  }
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+code { font-family: "Fira Code", "Cascadia Code", monospace; }
+
+/* Mobile responsive */
+@media (max-width: 640px) {
+  .mobile-menu-btn {
+    display: flex !important;
+  }
+  .mobile-overlay {
+    display: block !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .mobile-close-btn {
+    display: flex !important;
+  }
+}
